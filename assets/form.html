@@ -1,0 +1,172 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+        <script type='text/javascript'>
+            function addFields(){
+                // Number of inputs to create
+                var number = document.getElementById("segment_count").value;
+                // Container <div> where dynamic content will be placed
+                var container = document.getElementById("container");
+                // Clear previous contents of the container
+                while (container.hasChildNodes()) {
+                    container.removeChild(container.lastChild);
+                }
+                for (i=0;i<number;i++){
+                    // Append a node with a random text
+                    container.appendChild(document.createTextNode("SOM " + (i+1)));
+                    // Create an <input> element, set its type and name attributes
+                    var input = document.createElement("input");
+                    input.type = "text";
+                    input.name = "SOM " + i;
+                    input.id = "SOM" + i;
+                    input.placeholder = "00:00:00:00";
+                    input.pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]):([0-9][0-9])?$";
+                    input.required;
+                    container.appendChild(input);
+                    // Append a line break
+                    container.appendChild(document.createElement("br"));
+
+                    // Append a node with a random text
+                    container.appendChild(document.createTextNode("EOM " + (i+1)));
+                    // Create an <input> element, set its type and name attributes
+                    var input2 = document.createElement("input");
+                    input2.type = "text";
+                    input2.name = "EOM " + i;
+                    input2.id = "EOM" + i;
+                    input2.placeholder = "00:00:00:00";
+                    input2.pattern="^([0-1]?[0-9]|2[0-4]):([0-5][0-9]):([0-5][0-9]):([0-9][0-9])?$";
+                    input2.required;
+                    container.appendChild(input2);
+                    // Append a line break
+                    container.appendChild(document.createElement("br"));
+                }
+            }
+
+            function changeSelect1(select1) {
+              var uniqueresultsJS = <%- JSON.stringify(uniqueresults) %>;
+
+              //alert(uniqueresultsJS);
+              var product = uniqueresultsJS[select1.selectedIndex];
+
+              document.getElementById("tmsId").value = product.tmsId;
+              document.getElementById("title").value = product.title;
+              document.getElementById("episodeTitle").value = product.episodeTitle;
+              document.getElementById("longDescription").value = product.longDescription;
+              document.getElementById("startTime").value = product.startTime;
+              document.getElementById("channels").value = product.channels;
+              document.getElementById("duration").value = product.duration;
+
+            }
+        </script>
+
+</head>
+<body style="background-color:#FAFAFA;">
+
+
+<div style="margin:0 20px 20px 20px">
+
+  <h3> <i style="color:#6E6E6E" class="fa fa-pencil-square-o"></i> TV Shows Upload Details</h3>
+	<p>Please provide details about the video file you are uploading below.</p>
+
+    <div class="form-group">
+        <span>Submitted by:</span>
+        <span><strong><%= sender %></strong></span>
+    </div>
+    <div class="form-group">
+        <span>Total Submission Size:</span>
+        <span><strong><%=formattedPackageSize %></strong></span>
+    </div>
+
+    <form action="/processForm" method="post">
+
+
+        <input name="redirectUrl" type="hidden" value="<%= redirectUrl %>"/>
+
+
+        <div class="form-group">
+            <form>
+            <% files.forEach(function(file, index) { %>
+                <input name="files[<%= index %>][name]" type="hidden" value="<%= file.fileName %>"/>
+                <div  style="background-color:#D8D8D8;" class="form-group">
+                    <span>File:</span>
+                    <span><%= file.fileName %></span>
+                </div>
+
+                <div class="form-group">
+                    <span class="col-xs-3 control-label">Description</span>
+                    <div class="col-xs-9">
+                        <textarea class="form-control" name="files[<%= index %>][description]" placeholder="Enter file description"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div role="tabpanel" class="col-xs-4 control-label" id="container">
+                        <span class="col-xs-3 control-label">Number of Segments: </span>
+                            <input type="text" id="segment_count" name="segment_count" pattern="^([0-9]" value="" placeholder="1"><br/><br/>
+                        <button type="button" id="segment" onclick="addFields()">Fill Details</button><br/><br/>
+                    </div>
+                </div>
+
+
+                <div id="Gracenotes" class="form-group">
+                  <label for="Shows" class="col-xs-3 control-label"><b>Shows: </b></label>
+                    <select id="Shows" name="Shows" class="form-control" onchange="changeSelect1(this)">
+                      <% uniqueresults.forEach(function(filteredResult, index) { %>
+                          <option value="<%= filteredResult.title %>"> <%= filteredResult.title %></option>
+                          <% }); %>
+                    </select>
+
+                </div5
+
+
+                <% if (uniqueresults.length > 0) { %>
+                <div class="form-group">
+                    <div role="tabpanel" class="col-xs-4 control-label" id="container">
+
+                    <input type="hidden" id="tmsId" name="tmsId" value="<%= uniqueresults[0].tmsId %>" placeholder="">
+                    <span class="col-xs-3 control-label">Channels: </span>
+                        <input type="text" id="channels" name="channels" value="<%= uniqueresults[0].channels %>" size="4" placeholder=""><br/>
+                    <span class="col-xs-3 control-label">Broadcast Date-Time: </span>
+                        <input type="datetime" id="startTime" name="startTime" value="<%= uniqueresults[0].startTime %>" placeholder=""><br/>
+                    <span class="col-xs-3 control-label">Duration: </span>
+                        <input type="text" id="duration" name="duration" value="<%= uniqueresults[0].duration %>" size= "4" placeholder=""><br/>
+                    <span class="col-xs-3 control-label">Series Title: </span>
+                        <input type="text" id="title" name="title" value="<%= uniqueresults[0].title %>" size="55" placeholder=""><br/>
+                    <span class="col-xs-3 control-label">Episode Title: </span>
+                            <input type="text" id="episodeTitle" name="title" value="<%= uniqueresults[0].episodeTitle %>" size="55" placeholder=""><br/>
+                    <span class="col-xs-3 control-label">Long Description: </span>
+                    <div class="col-xs-9">
+                        <textarea class="form-control" id="longDescription" name="longDescription" value="<%= uniqueresults[0].longDescription %>" placeholder="" rows="2"></textarea>
+                    </div>
+                    <br/><br/>
+
+
+
+
+                    </div>
+                </div>
+                <% } %>
+
+            <% }); %>
+            </form>
+
+            <div style="margin:0 20px 20px 20px">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary pull-right">SUBMIT</button>
+                </div>
+                <br>
+                <br>
+            </div>
+        </div>
+
+
+
+    </form>
+
+</div>
+</body>
+</html>

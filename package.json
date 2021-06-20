@@ -1,0 +1,43 @@
+{
+  "name": "mediashuttle-metadata-aws-sample",
+  "version": "2.0.0",
+  "description": "Sample project to demonstrate how to set up a Media Shuttle Metadata collection form using Amazon Web Services (AWS)",
+  "keywords": [
+    "signiant",
+    "mediashuttle"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "build": "npm run build:zip && npm i",
+    "build:clean": "mkdir -p deploy/lambda && rm -rf deploy/lambda/*",
+    "build:zip": "npm run build:clean && npm ci --production && zip -r deploy/lambda/function.zip node_modules src > /dev/null",
+    "cdk": "cdk",
+    "deploy": "cdk deploy '*' --require-approval never"
+  },
+  "devDependencies": {
+    "@aws-cdk/aws-apigatewayv2": "^1.107.0",
+    "@aws-cdk/aws-apigatewayv2-integrations": "^1.107.0",
+    "@aws-cdk/aws-lambda": "^1.107.0",
+    "@aws-cdk/aws-s3": "^1.107.0",
+    "@aws-cdk/aws-s3-deployment": "^1.107.0",
+    "@aws-cdk/core": "^1.107.0",
+    "aws-cdk": "^1.107.0",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "prettier": "^2.3.1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.923.0",
+    "byte-size": "^7.0.1",
+    "ejs": "^3.1.6",
+    "got": "^11.8.2",
+    "lodash": "^4.17.21",
+    "luxon": "^1.27.0",
+    "node-fetch": "^2.6.0",
+    "qs": "^6.10.1",
+    "uuid": "^3.3.2"
+  }
+}
