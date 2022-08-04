@@ -5,7 +5,7 @@ using Amazon Web Services (AWS) and Gracenote API to retrieve TV programming.
 
 ## Architecture
 
-![architecture](img/architecture.png)
+![architecture](architecture.png)
 
 The sample uses a simple web service pattern where an API Gateway registering an HTTP API endpoint proxies
 incoming requests to a backing Lambda function for processing. The Lambda function also makes use of a static
