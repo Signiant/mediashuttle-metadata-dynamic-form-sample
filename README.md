@@ -47,3 +47,8 @@ is required, as well as a unique CDK stack name defined in `bin/mediashuttle-met
 An outbound API call to Gracenote, located in `src/index.js` line 18 to 56 , is provided as an example and is optional.
 Should you want to use it, the Gracenote API key needs to be inserted at line 16.
 For more information on Gracenote’s OnConnect APIs and to register, please visit: https://developer.tmsapi.com/Getting_Started
+
+Note: this sample was created using 
+node v14.20.0
+npm 6.14.17
+cdk 1.92.0
